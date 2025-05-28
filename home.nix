@@ -73,6 +73,9 @@ with lib.hm.gvariant;
     pkgs.gnomeExtensions.tray-icons-reloaded
     pkgs.gnomeExtensions.quick-settings-audio-panel
     pkgs.yazi
+    pkgs.mpv
+    # pkgs.graphite
+    pkgs.tor-browser
     # pkgs.rustup
     # pkgs.gcc
     # pkgs.openssl
