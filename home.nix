@@ -32,6 +32,8 @@ with lib.hm.gvariant;
   home.username = "hey";
   home.homeDirectory = "/home/hey";
 
+  services.flameshot.enable = true;
+
   nixpkgs.config.allowUnfree = true;
 
   # This value determines the Home Manager release that your configuration is
@@ -74,6 +76,14 @@ with lib.hm.gvariant;
     pkgs.gnomeExtensions.quick-settings-audio-panel
     pkgs.yazi
     pkgs.mpv
+    pkgs.bolt-launcher
+    pkgs.ncdu
+    pkgs.krita
+    pkgs.flameshot
+    pkgs.sshfs
+    pkgs.ripgrep
+    pkgs.bat
+    pkgs.xdotool
     # pkgs.graphite
     pkgs.tor-browser
     # pkgs.rustup
@@ -126,6 +136,7 @@ with lib.hm.gvariant;
   #  /etc/profiles/per-user/hey/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
+    QT_QPA_PLATFORM = "wayland";
     # EDITOR = "emacs";
   };
 
@@ -133,6 +144,18 @@ with lib.hm.gvariant;
   programs.home-manager.enable = true;
 
   dconf.enable = true;
+
+  dconf.settings."org/gnome/settings-daemon/plugins/media-keys".custom-keybindings = [
+    "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+  ];
+  dconf.settings."org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0".binding =
+    "Print";
+  dconf.settings."org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0".command =
+    "xdotool exec flameshot gui";
+  # "/bin/sh -c \"XDG_CURRENT_DESKTOP=gnome XDG_SESSION_TYPE=wayland QT_QPA_PLATFORM=wayland ${pkgs.flameshot}/bin/flameshot gui\"";
+  dconf.settings."org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0".name =
+    "flameshot";
+
   dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
   dconf.settings."org/gnome/desktop/session".idle-delay = mkUint32 0;
   dconf.settings."org/gnome/shell".disable-user-extensions = false;
