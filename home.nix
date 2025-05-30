@@ -84,8 +84,11 @@ with lib.hm.gvariant;
     pkgs.ripgrep
     pkgs.bat
     pkgs.xdotool
+    pkgs.nvtopPackages.full
+    pkgs.fastfetch
     # pkgs.graphite
     pkgs.tor-browser
+    pkgs.spaceship-prompt
     # pkgs.rustup
     # pkgs.gcc
     # pkgs.openssl
@@ -106,18 +109,20 @@ with lib.hm.gvariant;
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
-  home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
+  # home.file = {
+  #   # # Building this configuration will create a copy of 'dotfiles/screenrc' in
+  #   # # the Nix store. Activating the configuration will then make '~/.screenrc' a
+  #   # # symlink to the Nix store copy.
+  #   # ".screenrc".source = dotfiles/screenrc;
 
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
-  };
+  #   # # You can also set the file content immediately.
+  #   # ".gradle/gradle.properties".text = ''
+  #   #   org.gradle.console=verbose
+  #   #   org.gradle.daemon.idletimeout=3600000
+  #   # '';
+  # };
+  home.file.".zsh-custom/themes/spaceship.zsh-theme".source =
+    "${pkgs.spaceship-prompt}/share/zsh/themes/spaceship.zsh-theme";
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
@@ -234,7 +239,17 @@ with lib.hm.gvariant;
   programs.git.userEmail = "146812294+hey-adora@users.noreply.github.com";
   programs.git.extraConfig.safe.directory = "*";
 
+  programs.mpv.enable = true;
+  programs.mpv.config.hwdec = "auto";
+
   programs.zsh.enable = true;
+  programs.zsh.enableCompletion = true;
+  programs.zsh.autosuggestion.enable = true;
+  programs.zsh.syntaxHighlighting.enable = true;
+  programs.zsh.oh-my-zsh.enable = true;
+  programs.zsh.oh-my-zsh.plugins = [ "git" ];
+  programs.zsh.oh-my-zsh.theme = "spaceship";
+  programs.zsh.oh-my-zsh.custom = "$HOME/.zsh-custom";
 
   programs.atuin.enable = true;
   programs.atuin.settings."db_path" = "/mnt/hdd1/atuin/history.db";
