@@ -19,13 +19,24 @@ with lib.hm.gvariant;
     nur.overlays.default
     nix-vscode-extensions.overlays.default
     (final: prev: {
-      blender = prev.blender.override {
-        cudaSupport = true;
-        hipSupport = true;
-        waylandSupport = true;
-        jackaudioSupport = true;
-      };
+      zen-browser = zen-browser.packages."${system}".default;
     })
+    # (final: prev: {
+    #   blender = prev.blender.override {
+    #     cudaSupport = true;
+    #     hipSupport = true;
+    #     waylandSupport = true;
+    #     # jackaudioSupport = true;
+    #   };
+    # })
+    # (final: prev: {
+    #   obs-studio = prev.obs-studio.override {
+    #     cudaSupport = true;
+    #     # hipSupport = true;
+    #     # waylandSupport = true;
+    #     # jackaudioSupport = true;
+    #   };
+    # })
   ];
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -35,6 +46,7 @@ with lib.hm.gvariant;
   services.flameshot.enable = true;
 
   nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.cudaSupport = true;
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -47,52 +59,60 @@ with lib.hm.gvariant;
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
+  home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
-    pkgs.git
-    pkgs.git-lfs
-    pkgs.firefox
-    pkgs.discord
-    pkgs.neovim
-    pkgs.wl-clipboard
-    pkgs.vscodium
-    pkgs.bitwarden-desktop
-    pkgs.nixfmt-rfc-style
-    pkgs.atuin
-    pkgs.anydesk
-    pkgs.github-desktop
-    pkgs.dconf-editor
-    pkgs.dconf2nix
-    pkgs.blender
-    pkgs.vulkan-tools
-    pkgs.pciutils
-    pkgs.gnome-boxes
-    pkgs.steam
-    pkgs.ffmpeg-full
-    pkgs.yt-dlp
-    pkgs.gnomeExtensions.tray-icons-reloaded
-    pkgs.gnomeExtensions.quick-settings-audio-panel
-    pkgs.yazi
-    pkgs.mpv
-    pkgs.bolt-launcher
-    pkgs.ncdu
-    pkgs.krita
-    pkgs.flameshot
-    pkgs.sshfs
-    pkgs.ripgrep
-    pkgs.bat
-    pkgs.xdotool
-    pkgs.nvtopPackages.full
-    pkgs.fastfetch
+    git
+    git-lfs
+    firefox
+    discord
+    neovim
+    wl-clipboard
+    vscodium
+    bitwarden-desktop
+    nixfmt-rfc-style
+    atuin
+    anydesk
+    github-desktop
+    dconf-editor
+    dconf2nix
+    # pkgs.blender
+    vulkan-tools
+    pciutils
+    gnome-boxes
+    steam
+    ffmpeg-full
+    yt-dlp
+    gnomeExtensions.tray-icons-reloaded
+    gnomeExtensions.quick-settings-audio-panel
+    yazi
+    mpv
+    bolt-launcher
+    ncdu
+    krita
+    flameshot
+    sshfs
+    ripgrep
+    bat
+    xdotool
+    nvtopPackages.full
+    fastfetch
+    cachix
+    libva-utils
+    jetbrains.clion
+    qbittorrent
+    # pkgs.cudaPackages.cudatoolkit
+    # pkgs.obs-studio
     # pkgs.graphite
-    pkgs.tor-browser
-    pkgs.spaceship-prompt
+    tor-browser
+    spaceship-prompt
+    telegram-desktop
+    zen-browser
     # pkgs.rustup
     # pkgs.gcc
     # pkgs.openssl
-    zen-browser.packages."${system}".default
+    # zen-browser.packages."${system}".default
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -234,6 +254,22 @@ with lib.hm.gvariant;
 
   programs.bash.enable = true;
 
+  programs.obs-studio.enable = true;
+  # programs.obs-studio.package = pkgs.obs-studio;
+  programs.obs-studio.package = (
+    pkgs.obs-studio.override {
+      cudaSupport = true;
+    }
+  );
+  programs.obs-studio.plugins = with pkgs.obs-studio-plugins; [
+    wlrobs
+    obs-backgroundremoval
+    obs-pipewire-audio-capture
+    obs-gstreamer
+    obs-vaapi
+    obs-vkcapture
+  ];
+
   programs.git.enable = true;
   programs.git.userName = "hey";
   programs.git.userEmail = "146812294+hey-adora@users.noreply.github.com";
@@ -268,6 +304,7 @@ with lib.hm.gvariant;
     pkgs.vscode-marketplace.rust-lang.rust-analyzer
     pkgs.vscode-marketplace.tamasfe.even-better-toml
     pkgs.vscode-marketplace.fill-labs.dependi
+    pkgs.vscode-marketplace.llvm-vs-code-extensions.vscode-clangd
   ];
 
   programs.firefox.enable = true;
