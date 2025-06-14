@@ -571,7 +571,9 @@ with lib.hm.gvariant;
     fill-labs.dependi
     llvm-vs-code-extensions.vscode-clangd
     ms-dotnettools.csdevkit
-    vadimcn.vscode-lldb
+    # vadimcn.vscode-lldb
+  ] ++[
+    pkgs.vscode-extensions.vadimcn.vscode-lldb
   ];
 
   programs.firefox.enable = true;
