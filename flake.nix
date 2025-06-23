@@ -173,6 +173,13 @@
                   ripgrep
                   colordiff
                   gimp3
+                  linux-manual
+                  man-pages
+                  man-pages-posix
+		  powertop
+		  powerstat
+		  clinfo
+		  # rcon-cli
                 ]
                 ++ [
                   inputs.zen-browser.packages."${system}".default
@@ -192,6 +199,10 @@
               programs.home-manager.enable = true;
               programs.bash.enable = true;
               programs.alacritty.enable = true;
+
+              # man
+              programs.man.enable = true;
+              programs.man.generateCaches = false;
 
               # zsh
               programs.zsh.enable = true;
@@ -369,6 +380,11 @@
                   fill-labs.dependi
                   llvm-vs-code-extensions.vscode-clangd
                   ms-dotnettools.csdevkit
+                  bradlc.vscode-tailwindcss
+                  svelte.svelte-vscode
+                  esbenp.prettier-vscode
+                  dbaeumer.vscode-eslint
+                  # DioxusLabs.dioxus
                 ]
                 ++ [
                   pkgs.vscode-extensions.vadimcn.vscode-lldb
