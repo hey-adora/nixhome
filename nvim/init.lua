@@ -33,10 +33,36 @@ require("catppuccin").setup({
 })
 vim.cmd.colorscheme("catppuccin")
 
+-- require("telescope").setup({
+--   extensions = {
+--     ["ui-select"] = {
+--       require("telescope.themes").get_dropdown {
+--         -- even more opts
+--       }
+--
+--       -- pseudo code / specification for writing custom displays, like the one
+--       -- for "codeactions"
+--       -- specific_opts = {
+--       --   [kind] = {
+--       --     make_indexed = function(items) -> indexed_items, width,
+--       --     make_displayer = function(widths) -> displayer
+--       --     make_display = function(displayer) -> function(e)
+--       --     make_ordinal = function(e) -> string
+--       --   },
+--       --   -- for example to disable the custom builtin "codeactions" display
+--       --      do the following
+--       --   codeactions = false,
+--       -- }
+--     }
+--   }
+-- })
+-- require("telescope").load_extension("ui-select")
 local telescope = require("telescope").setup({})
 local telescope_builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", telescope_builtin.find_files, {})
 vim.keymap.set("n", "<leader>fg", telescope_builtin.git_files, {})
+vim.keymap.set("n", "<leader>fb", telescope_builtin.buffers, {})
+vim.keymap.set("n", "<leader>ft", telescope_builtin.treesitter, {})
 vim.keymap.set("n", "<leader>fs", function()
 	telescope_builtin.grep_string({ search = vim.fn.input("Grep > ") })
 end)
@@ -55,6 +81,17 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 
+-- vim.lsp.enable("lua_ls")
+
+-- vim.lsp.config("rust_analyzer", {
+-- 	on_attach = function(client, bufnr)
+-- 		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+-- 	end,
+-- 	settings = {
+-- 		["rust-analyzer"] = {},
+-- 	},
+-- })
+
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 local lspconfig = require("lspconfig")
 lspconfig.lua_ls.setup({
@@ -62,6 +99,9 @@ lspconfig.lua_ls.setup({
 })
 lspconfig.rust_analyzer.setup({
 	capabilities = capabilities,
+	on_attach = function(client, bufnr)
+		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+	end,
 })
 
 local null_ls = require("null-ls")
@@ -71,13 +111,15 @@ null_ls.setup({
 		null_ls.builtins.formatting.nixfmt,
 	},
 })
-vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format, {})
 
-vim.lsp.enable("lua_ls")
-vim.lsp.enable("rust_analyzer")
+-- vim.lsp.enable("rust_analyzer")
+
 vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
 vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format, {})
+vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, {})
 
 local cmp = require("cmp")
 require("luasnip.loaders.from_vscode").load()
@@ -191,7 +233,7 @@ require("lualine").setup({
 
 vim.diagnostic.config({
 	-- update_in_insert = true,
-    virtual_text = true,
+	virtual_text = true,
 	float = {
 		focusable = false,
 		style = "minimal",
@@ -201,13 +243,20 @@ vim.diagnostic.config({
 		prefix = "",
 	},
 })
-vim.keymap.set("n", "cx", function()
-    vim.diagnostic.open_float()
+vim.keymap.set("n", "<leader>cd", function()
+	vim.diagnostic.open_float()
 end)
 
 local trouble = require("trouble")
 trouble.setup({})
 -- trouble.
+vim.keymap.set("n", "<leader>bd", "<cmd>bd<CR>")
+-- vim.keymap.set("n", "<leader>xj", function()
+-- 	vim.cmd([[ Trouble diagnostics next ]])
+-- end)
+-- vim.keymap.set("n", "<leader>xk", function()
+-- 	vim.cmd([[ Trouble diagnostics prev ]])
+-- end)
 
 vim.keymap.set("n", "<leader>xx", function()
 	vim.cmd([[ Trouble diagnostics toggle ]])
@@ -225,3 +274,63 @@ end)
 -- 	pattern = "LspProgressStatusUpdated",
 -- 	callback = require("lualine").refresh,
 -- })
+
+require("smear_cursor").setup({})
+require("neoscroll").setup({
+	duration_multiplier = 0.2,
+	performance_mode = true,
+	-- duration_multiplier = 0.2,
+	-- performance_mode = true,
+})
+
+local harpoon = require("harpoon")
+
+-- REQUIRED
+harpoon:setup()
+-- REQUIRED
+
+vim.keymap.set("n", "<leader>a", function()
+	harpoon:list():add()
+end)
+vim.keymap.set("n", "<leader>h", function()
+	harpoon.ui:toggle_quick_menu(harpoon:list())
+end)
+
+vim.keymap.set("n", "<leader>1", function()
+	harpoon:list():select(1)
+end)
+vim.keymap.set("n", "<leader>2", function()
+	harpoon:list():select(2)
+end)
+vim.keymap.set("n", "<leader>3", function()
+	harpoon:list():select(3)
+end)
+vim.keymap.set("n", "<leader>4", function()
+	harpoon:list():select(4)
+end)
+
+-- Toggle previous & next buffers stored within Harpoon list
+vim.keymap.set("n", "<C-S-P>", function()
+	harpoon:list():prev()
+end)
+vim.keymap.set("n", "<C-S-N>", function()
+	harpoon:list():next()
+end)
+
+-- require("marks").setup({})
+
+require("treesitter-context").setup({
+	enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+	-- multiwindow = false, -- Enable multiwindow support.
+	max_lines = 5, -- How many lines the window should span. Values <= 0 mean no limit.
+	-- min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+	-- line_numbers = true,
+	multiline_threshold = 1, -- Maximum number of lines to show for a single context
+	-- trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+	-- mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+	-- -- Separator between context and content. Should be a single character string, like '-'.
+	-- -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+	-- separator = nil,
+	-- zindex = 20, -- The Z-index of the context window
+	-- on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+})

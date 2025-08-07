@@ -149,6 +149,7 @@
                   noto-fonts-cjk-sans
                   noto-fonts-emoji
                   liberation_ttf
+                  dejavu_fonts
                   hck
                   ripgrep
                   colordiff
@@ -235,6 +236,7 @@
                   nerd-fonts.fantasque-sans-mono
                   nerd-fonts.bitstream-vera-sans-mono
                   symbola
+                  ibm-plex
                   kbd
                   ubuntu_font_family
                   chromium
@@ -248,6 +250,11 @@
                   # nixfmt-tree
                   nixfmt-classic
                   lua-language-server
+                  lazygit
+                  usbutils
+                  cyme
+                  cmatrix
+                  lolcat
                   # vimPlugins.catppuccin-nvim
                 ] ++ [ inputs.zen-browser.packages."${system}".default ];
 
@@ -264,10 +271,18 @@
               # fonts.fontconfig.defaultFonts.serif = [ "Liberation Serif" ];
               # fonts.fontconfig.defaultFonts.sansSerif = [ "Ubuntu" ];
               # fonts.fontconfig.defaultFonts.monospace = [ "Ubuntu Mono" ];
-              fonts.fontconfig.defaultFonts.serif = [ "Noto Serif Regular" ];
-              fonts.fontconfig.defaultFonts.sansSerif = [ "Noto Sans Regular" ];
+              fonts.fontconfig.defaultFonts.serif = [ "Noto Serif" ];
+              # fonts.fontconfig.defaultFonts.serif = [ "Noto Serif Regular" ]; Noto Serif
+              fonts.fontconfig.defaultFonts.sansSerif = [ "Noto Sans" ];
+              # fonts.fontconfig.defaultFonts.sansSerif =
+              #   [ "Noto Sans Regular" ];
+              # fonts.fontconfig.defaultFonts.sansSerif =
+              #   [ "OpenDyslexicM Nerd Font" ];
+              # fonts.fontconfig.defaultFonts.sansSerif = [ "Noto Sans Regular" ];
+              # fonts.fontconfig.defaultFonts.monospace =
+              #   [ "Noto Sans Mono Regular" "Symbola" ];
               fonts.fontconfig.defaultFonts.monospace =
-                [ "Noto Sans Mono Regular" ];
+                [ "Noto Sans Mono" "Symbola" ];
               fonts.fontconfig.defaultFonts.emoji = [ "Noto Color Emoji" ];
 
               programs.home-manager.enable = true;
@@ -290,9 +305,16 @@
                 cmp_luasnip
                 friendly-snippets
                 cmp-nvim-lsp
-                lsp-progress-nvim
+                # lsp-progress-nvim
                 lualine-nvim
                 trouble-nvim
+                plenary-nvim
+                harpoon2
+                smear-cursor-nvim
+                neoscroll-nvim
+                telescope-ui-select-nvim
+                marks-nvim
+                nvim-treesitter-context
               ];
               # programs.neovim.extraLuaConfig = ''
               #   vim.opt.number = true
